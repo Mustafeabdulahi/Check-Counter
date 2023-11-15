@@ -44,7 +44,7 @@ last_month_index = months_list.index(last_month)
 dash_1 = st.container()
 
 with dash_1:
-    st.markdown("<h2 style='text-align: center;'>Essential Check Counter Dashboard</h2>", unsafe_allow_html=True)
+    st.markdown("<h2 style='text-align: center;'>Monthly Check Counter Dashboard</h2>", unsafe_allow_html=True)
     st.write("")
 
 # Instructions
