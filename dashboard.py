@@ -9,18 +9,25 @@ from clean_data import process_file
 def load_data():
     file = st.sidebar.file_uploader("Upload Excel file", type=['xlsx'])
     if file:
-        df = process_file(file)  # Assuming process_file is similar to this
-        df['Gross'] = pd.to_numeric(df['Gross'], errors='coerce').round(2)
-        df['Check Number'] = df['Check Number'].astype(str)
-        return df
-    return None 
+        try:
+            # Placeholder for the 'process_file' function
+            df = process_file(file)  
+            df['Gross'] = pd.to_numeric(df['Gross'], errors='coerce').round(2)
+            df['Check Number'] = df['Check Number'].astype(str)
+            return df
+        except KeyError as err:
+            st.error(f"The file uploaded is not in the correct format: {err}, please upload the correct file")
+        except Exception as e:
+            st.error(f"An unexpected error occurred: {e}")
+            # Optionally log the error details
+            # st.write(e)
+    return None
 
+new_df = load_data()
 
 # Function to convert DataFrame to CSV and return it
 def convert_df_to_csv(df):
     return df.to_csv().encode('utf-8')
-
-new_df = load_data()
 
 # Calculate Check month
 today = datetime.now()
@@ -79,13 +86,18 @@ def main():
                 total_check_num = new_df['Check Number'].count()
                 total_employees = new_df['Employee ID'].nunique()
                 total_h_worked = new_df['Hours Worked'].sum()
+                formatted_total_h_worked = "{:,.0f}".format(total_h_worked)
                 total_gross = new_df['Gross'].sum()
+                formatted_total_gross = "{:,.0f}".format(total_gross)
 
-                col1, col2, col3, col4 = st.columns(4)
+
+                col1, col2, col3, col4 = st.columns([2,2,2,2])
                 col1.metric(label="Total Checks", value=total_check_num)
                 col2.metric(label="Total Employees", value=total_employees)
-                col3.metric(label="Hours Worked", value=total_h_worked)
-                col4.metric(label="Total Gross", value=total_gross)  # Adjusted label
+                col3.metric(label="Hours Worked", value=formatted_total_h_worked    )
+                #col4.metric(label="Total Gross", value=total_gross)
+                # Display the formatted total_gross in the metric card
+                col4.metric(label="Total Gross", value=formatted_total_gross)  # Adjusted label
 
             # Style the metric card
             style_metric_cards(border_left_color="#DBF227")

@@ -20,6 +20,7 @@ def process_file(file):
 
     # Adjusting 'Check #' to handle string representations of numbers
     df['Check #'] = pd.to_numeric(df['Check #'], errors='coerce')
+    # Wrap the operation in a try-except block
 
     # Creating 'Employee ID' and 'Employee Name' columns based on observed pattern in the data
     current_employee_id = None
