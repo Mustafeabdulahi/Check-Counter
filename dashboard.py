@@ -6,6 +6,22 @@ from dateutil.relativedelta import relativedelta
 from streamlit_extras.metric_cards import style_metric_cards
 from clean_data import process_file
 
+st.set_page_config(layout="wide")
+
+#creates the container for page title
+dash_1 = st.container()
+
+with dash_1:
+    st.markdown("<h2 style='text-align: center;'>Monthly Check Counter Dashboard</h2>", unsafe_allow_html=True)
+    st.write("")
+
+# Instructions
+with st.expander("Instructions"):
+    st.write("Upload an Excel file with the columns 'Employee' and 'Check Count'.")
+
+
+
+
 def load_data():
     file = st.sidebar.file_uploader("Upload Excel file", type=['xlsx'])
     if file:
@@ -25,9 +41,6 @@ def load_data():
 
 new_df = load_data()
 
-# Function to convert DataFrame to CSV and return it
-def convert_df_to_csv(df):
-    return df.to_csv().encode('utf-8')
 
 # Calculate Check month
 today = datetime.now()
@@ -40,24 +53,15 @@ months_list = list(calendar.month_name)[1:]
 # Find the index of the last month in months_list
 last_month_index = months_list.index(last_month)
 
-# creates the container for page title
-dash_1 = st.container()
-
-with dash_1:
-    st.markdown("<h2 style='text-align: center;'>Monthly Check Counter Dashboard</h2>", unsafe_allow_html=True)
-    st.write("")
-
-# Instructions
-with st.expander("Instructions"):
-    st.write("Upload an Excel file with the columns 'Employee' and 'Check Count'.")
-
 # Sidebar options
 st.sidebar.header("Options")
 month = st.sidebar.selectbox("Select Month", months_list, index=last_month_index)
 check_count_greater = st.sidebar.slider('Employees with check less than', 0, 9, 2)
 check_count_less = st.sidebar.slider('Employees with checks less than', 0, 2, 2)
 
-
+# Function to convert DataFrame to CSV and return it
+def convert_df_to_csv(df):
+    return df.to_csv().encode('utf-8')
 
 # Streamlit app
 def main():
